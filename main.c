@@ -62,7 +62,7 @@ void	ft_execute_cmd(char *str, char **env)
 		exit(1);
 	}
 	execve(path, args, env);
-	ft_putstr_fd(path, 2);
+	//ft_putstr_fd(path, 2);
 	free(path);
 	//ft_free_list(args);
 }
