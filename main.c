@@ -75,7 +75,7 @@ void	ft_execute_cmd(char *str, char **env)
 	//path = ft_strjoin("./", args[0]);
 	if (!path)
 	{
-		ft_putnbr_fd("zsh: Command not found: ", 2);
+		ft_putstr_fd("zsh: Command not found: ", 2);
 		ft_putstr_fd(args[0], 2);
 		ft_free_tab(args);
 		ft_exit("\n");
