@@ -58,8 +58,8 @@ void	ft_execute_cmd(char *str, char **env)
 	if (!path)
 	{
 		free(args);
-		write(2, "Error allocating memory\n", 24);
-		exit(1);
+		write(2, "Command not found: ", 19);
+		ft_exit(args[0]);
 	}
 	execve(path, args, env);
 	//ft_putstr_fd(path, 2);
