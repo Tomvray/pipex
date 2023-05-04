@@ -5,7 +5,7 @@ int	ft_error()
 	write(2, "Error\n", 6);
 	return (1);
 }
-void	ft_exit(char	*str)
+void	ft_exit(char *str)
 {
 	ft_putstr_fd(str, 2);
 	exit(1);
@@ -57,9 +57,10 @@ void	ft_execute_cmd(char *str, char **env)
 	//path = ft_strjoin("./", args[0]);
 	if (!path)
 	{
-		free(args);
 		write(2, "Command not found: ", 19);
-		ft_exit(args[0]);
+		ft_putstr_fd(args[0], 2);
+		free(args);
+		ft_exit("\n");
 	}
 	execve(path, args, env);
 	//ft_putstr_fd(path, 2);
