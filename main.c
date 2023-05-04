@@ -5,6 +5,24 @@ int	ft_error()
 	write(2, "Error\n", 6);
 	return (1);
 }
+
+void	*ft_free_tab(char	**ptr)
+{
+	int	i;
+
+	if (ptr)
+	{
+		i = 0;
+		while (ptr[i])
+		{
+			free(ptr[i]);
+			i++;
+		}
+		free(ptr);
+	}
+	return (NULL);
+}
+
 void	ft_exit(char *str)
 {
 	ft_putstr_fd(str, 2);
@@ -59,7 +77,7 @@ void	ft_execute_cmd(char *str, char **env)
 	{
 		write(2, "Command not found: ", 19);
 		ft_putstr_fd(args[0], 2);
-		//free(args);
+		ft_free_tab(args);
 		ft_exit("\n");
 	}
 	execve(path, args, env);
