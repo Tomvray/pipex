@@ -59,7 +59,7 @@ void	ft_execute_cmd(char *str, char **env)
 	{
 		write(2, "Command not found: ", 19);
 		ft_putstr_fd(args[0], 2);
-		free(args);
+		//free(args);
 		ft_exit("\n");
 	}
 	execve(path, args, env);
