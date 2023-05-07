@@ -4,6 +4,7 @@
 # include <fcntl.h>
 # include <stdlib.h>
 # include "libft/libft.h"
+# include <sys/wait.h>
 #include <stdio.h>
 
 #endif

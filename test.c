@@ -46,7 +46,7 @@ char	*ft_path(char	*str, char **env)
 		i = 0;
 		while (all_paths[i] != ':')
 			i++;
-		path = malloc(sizeof(char) * (i + 2 + ft_strlen(str)));
+		path = malloc(sizeof(char) * (i + 1 + ft_strlen(str)));
 		if (!path)
 			ft_exit("Error allocating memory\n");
 		ft_strlcpy(path, all_paths, i + 1);
@@ -98,7 +98,6 @@ void	ft_do_cmd1(int	fd_pipe[2], char **av, char **env)
 	dup2(fd_pipe[1], 1);
 	close(fd_pipe[0]);
 	ft_execute_cmd(av[2], env);
-	close(fd_pipe[1]);
 	close(fd1);
 }
 
@@ -116,7 +115,6 @@ void	ft_do_cmd2(int	fd_pipe[], char **av, char **env)
 	dup2(fd_pipe[0], 0);
 	close(fd_pipe[1]);
 	ft_execute_cmd(av[3], env);
-	close(fd_pipe[0]);
 	close(fd2);
 }
 
@@ -135,9 +133,6 @@ int	main(int ac, char **av, char **env)
 	else if(pid == 0)
 		ft_do_cmd1(fd_pipe, av, env);
 	else
-	{
-		//wait(pid);
 		ft_do_cmd2(fd_pipe, av, env);
-	}
 	return (0);
 }
