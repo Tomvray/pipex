@@ -6,7 +6,7 @@
 /*   By: tvray <tvray@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 13:56:36 by tvray             #+#    #+#             */
-/*   Updated: 2023/05/08 15:16:54 by tvray            ###   ########.fr       */
+/*   Updated: 2023/05/08 15:46:47 by tvray            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	ft_do_cmd1(int fd_pipe[2], char **av, char **env)
 
 	fd1 = open(av[1], O_RDONLY);
 	if (fd1 == -1)
-		ft_perror(av[1]);
+		ft_perror(av[1], env);
 	dup2(fd1, 0);
 	dup2(fd_pipe[1], 1);
 	close(fd_pipe[0]);
@@ -61,7 +61,7 @@ void	ft_do_cmd2(int fd_pipe[], char **av, char **env)
 	fd2 = open(av[4], O_CREAT | O_RDWR | O_TRUNC, 0644);
 	if (fd2 == -1)
 	{
-		ft_perror(av[4]);
+		ft_perror(av[4], env);
 	}
 	dup2(fd2, 1);
 	dup2(fd_pipe[0], 0);
@@ -87,5 +87,6 @@ int	main(int ac, char **av, char **env)
 		ft_do_cmd1(fd_pipe, av, env);
 	else
 		ft_do_cmd2(fd_pipe, av, env);
+	wait(0);
 	return (0);
 }

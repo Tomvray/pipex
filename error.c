@@ -6,14 +6,32 @@
 /*   By: tvray <tvray@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 15:13:15 by tvray             #+#    #+#             */
-/*   Updated: 2023/05/08 15:23:17 by tvray            ###   ########.fr       */
+/*   Updated: 2023/05/08 15:41:19 by tvray            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	ft_perror(char *file_name)
+void	ft_print_shell(char **env)
 {
+	int	i;
+	int	j;
+
+	i = 0;
+	while (env && env[i] && ft_strncmp(env[i], "SHELL=", 6))
+		i++;
+	if (!env || !env[i])
+		return ;
+	j = ft_strlen(env[i]);
+	while (j > 5 && env[i][j] != '/')
+		j --;
+	ft_putstr_fd(env[i] + j + 1, 2);
+	ft_putstr_fd(": ", 2);
+}
+
+void	ft_perror(char *file_name, char **env)
+{
+	ft_print_shell(env);
 	if (errno == 13)
 		ft_putstr_fd("permission denied: ", 2);
 	else if (errno == 2)
