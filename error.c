@@ -6,7 +6,7 @@
 /*   By: tvray <tvray@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 15:13:15 by tvray             #+#    #+#             */
-/*   Updated: 2023/05/08 15:20:49 by tvray            ###   ########.fr       */
+/*   Updated: 2023/05/08 15:23:17 by tvray            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,6 @@ void	ft_perror(char *file_name)
 	if (errno == 13)
 		exit(1);
 	exit(errno);
-}
-
-int	ft_error(void)
-{
-	ft_putstr_fd("ERROR\n", 2);
-	exit(1);
 }
 
 void	ft_exit(char *str, int exit_code)
