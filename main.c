@@ -6,7 +6,7 @@
 /*   By: tvray <tvray@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 13:56:36 by tvray             #+#    #+#             */
-/*   Updated: 2023/05/08 15:46:47 by tvray            ###   ########.fr       */
+/*   Updated: 2023/05/08 16:08:01 by tvray            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,9 @@ void	ft_do_cmd2(int fd_pipe[], char **av, char **env)
 
 int	main(int ac, char **av, char **env)
 {
-	int	fd_pipe[2];
-	int	pid;
+	int		fd_pipe[2];
+	pid_t	pid;
+	int		status;
 
 	if (ac != 5)
 		ft_exit("Wrong number of arguments\n", 1);
@@ -85,8 +86,8 @@ int	main(int ac, char **av, char **env)
 		ft_exit("fork issue\n", 1);
 	else if (pid == 0)
 		ft_do_cmd1(fd_pipe, av, env);
-	else
+	if (pid > 0)
 		ft_do_cmd2(fd_pipe, av, env);
-	wait(0);
+	waitpid(pid, &status, 0);
 	return (0);
 }
