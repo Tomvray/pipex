@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_itoa.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tvray <tvray@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/10/03 12:42:07 by tvray             #+#    #+#             */
+/*   Updated: 2022/10/17 15:54:30 by tvray            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 
-int	ft_intlen(unsigned int n)
+static int	ft_intlen(unsigned int n)
 {
 	int	len;
 
@@ -15,9 +27,25 @@ int	ft_intlen(unsigned int n)
 	return (len);
 }
 
-char    *ft_itoa(int n)
+static char	*ft_fill_str(int size, int sign, char *str, unsigned int num)
 {
-	int				count;
+	int	count;
+
+	count = 1;
+	while (count <= size)
+	{
+		str[size + sign - count] = num % 10 + '0';
+		num = num / 10;
+		count++;
+	}
+	if (sign)
+		str[0] = '-';
+	str[size + sign] = 0;
+	return (str);
+}
+
+char	*ft_itoa(int n)
+{
 	int				size;
 	int				sign;
 	unsigned int	num;
@@ -32,18 +60,8 @@ char    *ft_itoa(int n)
 	else
 		num = n;
 	size = ft_intlen(num);
-	res = malloc(sizeof(char)* (size + sign + 1));
+	res = malloc(sizeof(char) * (size + sign + 1));
 	if (!res)
 		return (NULL);
-	count = 1;
-	while (count <= size)
-	{
-		res[size + sign - count] = num % 10 + '0';
-		num = num / 10;
-		count++;
-	}
-	if (sign)
-		res[0] = '-';
-	res[size + sign] = 0;
-	return (res);
+	return (ft_fill_str(size, sign, res, num));
 }

@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_split.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tvray <tvray@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/10/03 12:42:44 by tvray             #+#    #+#             */
+/*   Updated: 2022/10/17 16:00:32 by tvray            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 
-size_t	ft_lenword(char const *s, char c)
+static size_t	ft_lenword(char const *s, char c)
 {
 	size_t	len;
 
@@ -10,7 +22,21 @@ size_t	ft_lenword(char const *s, char c)
 	return (len);
 }
 
-char	**ft_splitcpy(char const *s, char **tab, char c, size_t len)
+static char	**free_split(char **s, size_t k)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < k)
+	{
+		free(s[i]);
+		i++;
+	}
+	free(s);
+	return (NULL);
+}
+
+static char	**ft_splitcpy(char const *s, char **tab, char c, size_t len)
 {
 	size_t	j;
 	size_t	k;
@@ -21,9 +47,9 @@ char	**ft_splitcpy(char const *s, char **tab, char c, size_t len)
 		k = 0;
 		while (*s && *s == c)
 			s++;
-		tab[j] = (char*) malloc(sizeof(char) * (ft_lenword(s, c) + 1));
+		tab[j] = (char *) malloc(sizeof(char) * (ft_lenword(s, c) + 1));
 		if (!tab[j])
-			return (NULL);
+			return (free_split(tab, k - 1));
 		while (*s && *s != c)
 		{
 			tab[j][k] = *s;
@@ -43,6 +69,8 @@ char	**ft_split(char const *s, char c)
 	size_t	i;
 	char	**res;
 
+	if (!s)
+		return (NULL);
 	nb_words = 0;
 	i = 0;
 	while (s[i])
@@ -54,31 +82,8 @@ char	**ft_split(char const *s, char c)
 		while (s[i] && s[i] != c)
 			i++;
 	}
-	res = malloc(sizeof(char*) * (nb_words + 1));
+	res = malloc(sizeof(char *) * (nb_words + 1));
 	if (!res)
 		return (NULL);
 	return (ft_splitcpy(s, res, c, nb_words));
 }
-
-/*
-int main(int argc, char **argv)
-{
-    char **split;
-	char	*s;
-    int i;
-    i = 0;
-	s = "01234";
-    if (argc == 3)
-    {
-        split = ft_split(argv[1], argv[2][0]);
-    
-        while (split[i])
-        {
-            printf("%s\n", split[i]);
-            free(split[i]);
-            i++;
-        }
-        free(split);
-    }
-}
-*/

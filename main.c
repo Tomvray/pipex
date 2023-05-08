@@ -35,19 +35,28 @@ char	*ft_path_pwd(char *cmd, char **env)
 	int		i;
 	int		pwd_size;
 
-	i = 0;
-	while (ft_strncmp(env[i], "PWD=", 4))
-		i++;
-	pwd_size = ft_strlen(env[i] + 4);
-	path = malloc(sizeof(char) * (pwd_size  + ft_strlen(cmd)));
-	if (!path)
-		ft_exit("Error allocating memory\n");
-	ft_strlcpy(path, env[i] + 4, pwd_size + 1);
-	ft_strlcat(path, "/", pwd_size + 2);
-	ft_strlcat(path, cmd + 2, pwd_size + ft_strlen(cmd));
-	if (!access(path, X_OK))
-		return(path);
-	free(path);
+	// i = 0;
+	// while (ft_strncmp(env[i], "PWD=", 4))
+	// 	i++;
+	// ft_putstr_fd(cmd, 2);
+	// pwd_size = ft_strlen(env[i] + 4);
+	// path = malloc(sizeof(char) * (pwd_size  + ft_strlen(cmd)));
+	// if (!path)
+	// 	ft_exit("Error allocating memory\n");
+	// ft_strlcpy(path, env[i] + 4, pwd_size + 1);
+	// ft_strlcat(path, "/", pwd_size + 2);
+	// ft_strlcat(path, cmd + 2, pwd_size + ft_strlen(cmd));
+	// if (!access(path, X_OK))
+	// 	return(path);
+	// free(path);
+	// path = malloc(sizeof(char) * (pwd_size  + ft_strlen(cmd)));
+	// if (!path)
+	// 	ft_exit("Error allocating memory\n");
+	// ft_strlcpy(path, "./", 3);
+	// ft_strlcat(path, cmd + 2, 3 + ft_strlen(cmd + 2));
+	// if (!access(path, X_OK))
+	// 	return(path);
+	// free(path);
 	path = ft_strdup(cmd);
 	if (!access(path, X_OK))
 		return(path);
@@ -70,7 +79,7 @@ char	*ft_path(char	*cmd, char **env)
 	while (*all_paths)
 	{
 		i = 0;
-		while (all_paths[i] != ':')
+		while (all_paths[i] && all_paths[i] != ':')
 			i++;
 		path = malloc(sizeof(char) * (i + 2 + ft_strlen(cmd)));
 		if (!path)
@@ -83,7 +92,6 @@ char	*ft_path(char	*cmd, char **env)
 		free(path);
 		all_paths = all_paths + i + 1;
 	}
-	//return(NULL);
 	return (ft_path_pwd(cmd, env));
 }
 
@@ -123,8 +131,10 @@ void	ft_do_cmd1(int	fd_pipe[2], char **av, char **env)
 	fd1 = open(av[1], O_RDONLY);
 	if (fd1 == -1)
 	{
-		ft_error();
-		return ;
+		ft_putstr_fd("no such file or directory: ", 2);
+		ft_putstr_fd(av[1], 2);
+		ft_putstr_fd("\n", 2);
+		exit(127);
 	}
 	dup2(fd1, 0);
 	dup2(fd_pipe[1], 1);
@@ -132,6 +142,7 @@ void	ft_do_cmd1(int	fd_pipe[2], char **av, char **env)
 	ft_execute_cmd(av[2], env);
 	close(fd_pipe[1]);
 	close(fd1);
+	exit(0);
 }
 
 void	ft_do_cmd2(int	fd_pipe[], char **av, char **env)
@@ -142,7 +153,7 @@ void	ft_do_cmd2(int	fd_pipe[], char **av, char **env)
 	if (fd2 == -1)
 	{
 		ft_error();
-		exit(1);
+		exit(127);
 	}
 	dup2(fd2, 1);
 	dup2(fd_pipe[0], 0);
@@ -159,7 +170,7 @@ int	main(int ac, char **av, char **env)
 
 	if (ac != 5)
 		return (ft_error());
-	if(pipe(fd_pipe) == -1)
+	if (pipe(fd_pipe) == -1)
 		return (ft_error());
 	pid = fork();
 	if (pid == -1)
@@ -168,7 +179,6 @@ int	main(int ac, char **av, char **env)
 		ft_do_cmd1(fd_pipe, av, env);
 	else
 	{
-		//wait(pid);
 		ft_do_cmd2(fd_pipe, av, env);
 	}
 	return (0);
