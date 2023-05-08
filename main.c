@@ -26,10 +26,36 @@ void	*ft_free_tab(char	**ptr)
 void	ft_exit(char *str)
 {
 	ft_putstr_fd(str, 2);
-	exit(1);
+	exit(127);
 }
 
-char	*ft_path(char	*str, char **env)
+char	*ft_path_pwd(char *cmd, char **env)
+{
+	char	*path;
+	int		i;
+	int		pwd_size;
+
+	i = 0;
+	while (ft_strncmp(env[i], "PWD=", 4))
+		i++;
+	pwd_size = ft_strlen(env[i] + 4);
+	path = malloc(sizeof(char) * (pwd_size  + ft_strlen(cmd)));
+	if (!path)
+		ft_exit("Error allocating memory\n");
+	ft_strlcpy(path, env[i] + 4, pwd_size + 1);
+	ft_strlcat(path, "/", pwd_size + 2);
+	ft_strlcat(path, cmd + 2, pwd_size + ft_strlen(cmd));
+	if (!access(path, X_OK))
+		return(path);
+	free(path);
+	path = ft_strdup(cmd);
+	if (!access(path, X_OK))
+		return(path);
+	free(path);
+	return(NULL);
+}
+
+char	*ft_path(char	*cmd, char **env)
 {
 	char	*all_paths;
 	char	*path;
@@ -46,18 +72,19 @@ char	*ft_path(char	*str, char **env)
 		i = 0;
 		while (all_paths[i] != ':')
 			i++;
-		path = malloc(sizeof(char) * (i + 2 + ft_strlen(str)));
+		path = malloc(sizeof(char) * (i + 2 + ft_strlen(cmd)));
 		if (!path)
 			ft_exit("Error allocating memory\n");
 		ft_strlcpy(path, all_paths, i + 1);
 		ft_strlcat(path, "/", i + 2);
-		ft_strlcat(path, str, i + 2 + ft_strlen(str));
+		ft_strlcat(path, cmd, i + 2 + ft_strlen(cmd));
 		if (!access(path, X_OK))
 			return(path);
 		free(path);
 		all_paths = all_paths + i + 1;
 	}
-	return (NULL);
+	//return(NULL);
+	return (ft_path_pwd(cmd, env));
 }
 
 void	ft_execute_cmd(char *str, char **env)
@@ -79,7 +106,12 @@ void	ft_execute_cmd(char *str, char **env)
 		ft_free_tab(args);
 		ft_exit("\n");
 	}
-	execve(path, args, env);
+	if (execve(path, args, env) == -1)
+	{
+		free(path);
+		ft_free_tab(args);
+		ft_exit("cant execute cmd\n");
+	}
 	free(path);
 	ft_free_tab(args);
 }
