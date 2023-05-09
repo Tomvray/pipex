@@ -6,7 +6,7 @@
 /*   By: tvray <tvray@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 13:56:36 by tvray             #+#    #+#             */
-/*   Updated: 2023/05/08 16:08:01 by tvray            ###   ########.fr       */
+/*   Updated: 2023/05/09 09:45:10 by tvray            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	ft_execute_cmd(char *str, char **env)
 	path = ft_path(args[0], env);
 	if (!path)
 	{
+		ft_print_shell(env);
 		ft_putstr_fd("command not found: ", 2);
 		ft_putstr_fd(args[0], 2);
 		ft_free_tab(args);
