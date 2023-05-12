@@ -6,7 +6,7 @@
 /*   By: tvray <tvray@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 15:13:15 by tvray             #+#    #+#             */
-/*   Updated: 2023/05/08 15:41:19 by tvray            ###   ########.fr       */
+/*   Updated: 2023/05/12 14:00:12 by tvray            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,7 @@ void	ft_perror(char *file_name, char **env)
 		ft_putstr_fd("no such file or directory: ", 2);
 	ft_putstr_fd(file_name, 2);
 	ft_putchar_fd('\n', 2);
-	if (errno == 13)
-		exit(1);
-	exit(errno);
+	exit(1);
 }
 
 void	ft_exit(char *str, int exit_code)
